@@ -47,7 +47,6 @@ done
 # initialise config replica set
 mongo --port 27017 /scripts/enable-sharding.js
 # start the HTTP server with the healthcheck
-echo "OK" > index.html
-python3 -m http.server
+echo "Mongo cluster started successfully.";
 
 while true; do sleep 30; done;
