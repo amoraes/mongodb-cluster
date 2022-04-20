@@ -1,0 +1,13 @@
+version: '3'
+services:
+  mongodb-cluster:
+    container_name: mongodb-cluster
+    image: mongodb-cluster
+    network_mode: bridge
+    ports:
+      - '8000:8000'
+      - '27017:27017'
+      - '27018:27018'
+      - '27101:27101'
+      - '27102:27102'
+      - '27103:27103'
