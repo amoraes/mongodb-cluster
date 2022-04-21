@@ -11,6 +11,7 @@ RUN /bin/sh -c "mkdir -p /var/lib/mongodb-conf1"
 RUN /bin/sh -c "mkdir -p /var/lib/mongodb-replica1"
 RUN /bin/sh -c "mkdir -p /var/lib/mongodb-replica2"
 RUN /bin/sh -c "mkdir -p /var/lib/mongodb-replica3"
+RUN /bin/sh -c "echo $DB_VERSION > /mongodb-version"
 # copy configs
 COPY config/config1.conf /etc/mongo/config1.conf
 COPY config/replica1.conf /etc/mongo/replica1.conf

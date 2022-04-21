@@ -1,10 +1,24 @@
 #!/bin/bash
 # start the config server
 mongod --config /etc/mongo/config1.conf &
+DB_VERSION=$(cat /mongodb-version)
+echo "MongoDB version: $DB_VERSION"
+
+function hasStarted() {
+  # the messages are slightly different in recent versions
+  RES1=$(cat $1 | grep "waiting for connections on port")
+  RES2=$(cat $1 | grep "Waiting for connections")
+  if [[ "$RES1" != "" || "$RES2" != "" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
+
 # wait config server to start
 while true; do
-  RES=$(cat /var/log/mongodb/mongod-conf1.log | grep "waiting for connections on port")
-  if [ "$RES" != "" ]; then
+  RES=$(hasStarted /var/log/mongodb/mongod-conf1.log)
+  if [ "$RES" == "true" ]; then
     echo "Config server started."
     break
   fi
@@ -20,10 +34,10 @@ mongod --config /etc/mongo/replica3.conf &
 
 # wait replica servers to start
 while true; do
-  RES1=$(cat /var/log/mongodb/mongod-replica1.log | grep "waiting for connections on port")
-  RES2=$(cat /var/log/mongodb/mongod-replica2.log | grep "waiting for connections on port")
-  RES3=$(cat /var/log/mongodb/mongod-replica3.log | grep "waiting for connections on port")
-  if [[ "$RES1" != "" && "$RES2" != "" && "$RES3" != "" ]]; then
+  RES1=$(hasStarted /var/log/mongodb/mongod-replica1.log)
+  RES2=$(hasStarted /var/log/mongodb/mongod-replica2.log)
+  RES3=$(hasStarted /var/log/mongodb/mongod-replica3.log)
+  if [[ "$RES1" == "true" && "$RES2" == "true" && "$RES3" == "true" ]]; then
     echo "Replica servers started."
     break
   fi
@@ -37,8 +51,8 @@ mongo --port 27103 /scripts/initiate-replica-set3.js
 mongos --config /etc/mongo/mongos.conf &
 # wait config server to start
 while true; do
-  RES=$(cat /var/log/mongodb/mongos.log | grep "waiting for connections on port")
-  if [ "$RES" != "" ]; then
+  RES=$(hasStarted /var/log/mongodb/mongos.log)
+  if [ "$RES" == "true" ]; then
     echo "Mongos started."
     break
   fi

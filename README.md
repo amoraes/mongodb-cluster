@@ -1,6 +1,6 @@
 MongoDB Cluster
 --
-This project contains a MongoDB cluster (Version 4.0 and 4.2 are available) with the following infrastructure:
+This project contains a MongoDB cluster (Version 4.0, 4.2, 4.4 and 5.0 are available) with the following infrastructure:
 
 * Mongos (port 27017)
 * Mongod Config (port 27018)
@@ -9,8 +9,10 @@ This project contains a MongoDB cluster (Version 4.0 and 4.2 are available) with
 * Mongod Shard 3 (ReplicaSet rs3) (port 27103)
 
 The images are available at:
-amoraes/mongodb-cluster:4.2
 amoraes/mongodb-cluster:4.0
+amoraes/mongodb-cluster:4.2
+amoraes/mongodb-cluster:4.4
+amoraes/mongodb-cluster:5.0
 
 After building it, use `docker-compose up --force-recreate` to run.
 

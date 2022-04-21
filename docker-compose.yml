@@ -2,7 +2,7 @@ version: '3'
 services:
   mongodb-cluster:
     container_name: mongodb-cluster
-    image: amoraes/mongodb-cluster:4.0
+    image: amoraes/mongodb-cluster:4.2
     network_mode: bridge
     ports:
       - '27017:27017'
