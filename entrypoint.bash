@@ -4,6 +4,12 @@ mongod --config /etc/mongo/config1.conf &
 DB_VERSION=$(cat /mongodb-version)
 echo "MongoDB version: $DB_VERSION"
 
+MONGO_SHELL="mongo"
+if [[ "$DB_VERSION" == 6* ]]; then
+  MONGO_SHELL="mongosh"
+fi
+echo "Using $MONGO_SHELL command as the Mongo Shell"
+
 function hasStarted() {
   # the messages are slightly different in recent versions
   RES1=$(cat $1 | grep "waiting for connections on port")
@@ -25,7 +31,7 @@ while true; do
   sleep 1
 done
 # initialise config replica set
-mongo --port 27018 /scripts/initiate-config-replica-set.js
+$MONGO_SHELL --port 27018 /scripts/initiate-config-replica-set.js
 
 # start all replicas
 mongod --config /etc/mongo/replica1.conf &
@@ -43,9 +49,9 @@ while true; do
   fi
   sleep 1
 done
-mongo --port 27101 /scripts/initiate-replica-set1.js
-mongo --port 27102 /scripts/initiate-replica-set2.js
-mongo --port 27103 /scripts/initiate-replica-set3.js
+$MONGO_SHELL --port 27101 /scripts/initiate-replica-set1.js
+$MONGO_SHELL --port 27102 /scripts/initiate-replica-set2.js
+$MONGO_SHELL --port 27103 /scripts/initiate-replica-set3.js
 
 # start the mongos (router)
 mongos --config /etc/mongo/mongos.conf &
@@ -59,7 +65,7 @@ while true; do
   sleep 1
 done
 # initialise config replica set
-mongo --port 27017 /scripts/enable-sharding.js
+$MONGO_SHELL --port 27017 /scripts/enable-sharding.js
 # start the HTTP server with the healthcheck
 echo "Mongo cluster started successfully.";
 

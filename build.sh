@@ -13,3 +13,7 @@ docker push $IMAGE
 IMAGE=amoraes/mongodb-cluster:5.0
 docker build . -t $IMAGE --build-arg DB_VERSION=5.0
 docker push $IMAGE
+
+IMAGE=amoraes/mongodb-cluster:6.0
+docker build . -t $IMAGE --build-arg DB_VERSION=6.0
+docker push $IMAGE
